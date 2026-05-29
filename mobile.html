@@ -1,0 +1,1751 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>🧪 ТЕСТ · Mobile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* === ТЕСТОВАЯ СРЕДА — визуальный маркер === */
+  .test-banner-mobile {
+    background: #dc2626; color: white;
+    padding: 4px 12px;
+    font-size: 11px; font-weight: 700;
+    text-align: center;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .test-banner-mobile::before { content: '🧪 '; }
+  .test-banner-mobile::after { content: ' 🧪'; }
+
+  :root {
+    --bg: #f5f1ea;
+    --bg-alt: #ebe5d9;
+    --ink: #2a2522;
+    --ink-soft: #6b625b;
+    --line: #d9d1c2;
+    --accent: #2d4a3e;
+    --accent-soft: #3d6353;
+    --gold: #b8956a;
+    --warn: #c2410c;
+    --warn-soft: #fbbf24;
+    --danger: #991b1b;
+    --ok: #15803d;
+    --info: #1e40af;
+    --table-free: #ffffff;
+    --table-free-line: #cdc4b3;
+    --table-new: #fde68a;
+    --table-confirmed: #86efac;
+    --table-arrived: #93c5fd;
+    --table-late: #fca5a5;
+    --table-walkin: #c4b5fd;
+    --table-done: #d4d4d4;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-md: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { font-family: 'Manrope', sans-serif; background: var(--bg); color: var(--ink); margin: 0; padding: 0; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; padding: 0; }
+  input, select { font-family: inherit; font-size: 16px; }
+
+  /* Шапка */
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--accent); color: white;
+    padding: 10px 14px;
+    display: flex; align-items: center; gap: 10px;
+    box-shadow: var(--shadow-md);
+  }
+  .topbar-title { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600; flex: 1; }
+  .conn-indicator {
+    display: flex; align-items: center; gap: 6px;
+    padding: 4px 10px; background: rgba(255,255,255,0.1); border-radius: 999px;
+    font-size: 11px; cursor: pointer;
+  }
+  .conn-dot { width: 7px; height: 7px; border-radius: 50%; background: #999; }
+  .conn-indicator.connected .conn-dot { background: #22c55e; box-shadow: 0 0 0 3px rgba(34,197,94,0.2); }
+  .conn-indicator.connecting .conn-dot { background: #f59e0b; animation: pulse 1.5s infinite; }
+  .conn-indicator.error .conn-dot { background: #ef4444; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  /* Кнопка выхода / профиля */
+  .user-btn {
+    color: white; font-size: 12px; padding: 4px 10px;
+    background: rgba(255,255,255,0.1); border-radius: 999px;
+  }
+
+  /* Вкладки ресторанов */
+  .rest-tabs {
+    display: flex; gap: 4px; padding: 8px 14px;
+    background: var(--bg-alt); overflow-x: auto; -webkit-overflow-scrolling: touch;
+    position: sticky; top: 50px; z-index: 40;
+  }
+  .rest-tabs button {
+    padding: 8px 14px; background: white; color: var(--ink);
+    border-radius: 999px; font-size: 13px; font-weight: 500;
+    border: 1px solid var(--line); white-space: nowrap;
+  }
+  .rest-tabs button.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+  /* Дата */
+  .date-bar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 14px; background: var(--bg);
+    border-bottom: 1px solid var(--line);
+  }
+  .date-display { flex: 1; font-family: 'Fraunces', serif; font-size: 17px; font-weight: 600; }
+  .date-nav { display: flex; gap: 4px; }
+  .date-nav button {
+    padding: 6px 10px; background: white; color: var(--ink);
+    border: 1px solid var(--line); border-radius: 6px; font-size: 12px;
+  }
+  .date-nav button.today { background: var(--accent); color: white; border-color: var(--accent); }
+  .date-input { width: 0; height: 0; opacity: 0; position: absolute; }
+
+  /* Схема зала */
+  .schema-section {
+    padding: 12px;
+    background: var(--bg);
+    border-bottom: 6px solid var(--bg-alt);
+  }
+  .schema-title {
+    font-family: 'Fraunces', serif; font-size: 14px; font-weight: 600;
+    margin-bottom: 8px; color: var(--ink-soft);
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .schema-wrap {
+    overflow: auto; -webkit-overflow-scrolling: touch;
+    background: white; border-radius: 8px; border: 1px solid var(--line);
+    padding: 8px; min-height: 100px;
+    touch-action: pan-x pan-y pinch-zoom;
+  }
+  .schema-canvas { transform-origin: 0 0; position: relative; }
+
+  /* Зона на схеме */
+  .zone-mobile {
+    display: inline-block; vertical-align: top; margin-right: 12px;
+    background: rgba(184,149,106,0.04); border-radius: 6px; padding: 8px;
+  }
+  .zone-mobile-name {
+    font-family: 'Fraunces', serif; font-size: 13px; font-weight: 600;
+    color: var(--ink); margin-bottom: 4px;
+  }
+  .zone-mobile-stats { font-size: 10px; color: var(--ink-soft); margin-bottom: 6px; }
+  .zone-canvas-mobile { position: relative; }
+
+  /* Стол */
+  .table-m {
+    position: absolute; background: var(--table-free);
+    border: 1px solid var(--table-free-line); border-radius: 6px;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    cursor: pointer; padding: 2px;
+  }
+  .table-m.shape-round { border-radius: 50%; }
+  .table-m.new { background: var(--table-new); border-color: #d4a017; }
+  .table-m.confirmed { background: var(--table-confirmed); border-color: #15803d; }
+  .table-m.arrived { background: var(--table-arrived); border-color: #1e40af; }
+  .table-m.late { background: var(--table-late); border-color: var(--danger); }
+  .table-m.walkin { background: var(--table-walkin); border-color: #6d28d9; }
+  .table-m.done { background: var(--table-done); border-color: #6b7280; }
+  .table-m-num { font-family: 'Fraunces', serif; font-size: 13px; font-weight: 700; line-height: 1; }
+  .table-m-info { font-size: 9px; margin-top: 2px; text-align: center; line-height: 1.1; padding: 0 2px; }
+
+  /* Список броней */
+  .list-section { padding: 12px; }
+  .list-title {
+    font-family: 'Fraunces', serif; font-size: 14px; font-weight: 600;
+    color: var(--ink-soft); margin-bottom: 8px;
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .list-empty { text-align: center; padding: 30px 12px; color: var(--ink-soft); font-size: 14px; }
+
+  .booking-card-m {
+    background: white; border-radius: 10px; padding: 10px 12px;
+    margin-bottom: 8px; border: 1px solid var(--line);
+    box-shadow: var(--shadow-sm);
+  }
+  .booking-card-m.walkin { border-left: 4px solid #8b5cf6; }
+  .booking-card-m.closed { opacity: 0.55; }
+  .bcm-row1 { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .bcm-time { font-weight: 700; font-size: 14px; }
+  .bcm-status { font-size: 10px; padding: 2px 8px; border-radius: 999px; font-weight: 600; }
+  .bcm-status.new { background: var(--table-new); color: #92400e; }
+  .bcm-status.confirmed { background: var(--table-confirmed); color: #14532d; }
+  .bcm-status.arrived { background: var(--table-arrived); color: #1e3a8a; }
+  .bcm-status.late { background: var(--table-late); color: #7f1d1d; }
+  .bcm-status.cancelled { background: #fecaca; color: var(--danger); }
+  .bcm-status.noshow { background: #d4d4d4; color: #525252; }
+  .bcm-status.done { background: var(--table-done); color: #404040; }
+  .bcm-status.walkin { background: var(--table-walkin); color: #4c1d95; }
+  .bcm-name { font-weight: 600; font-size: 15px; margin-bottom: 2px; }
+  .bcm-vip { display: inline-block; background: var(--gold); color: white; font-size: 10px; padding: 1px 6px; border-radius: 4px; margin-left: 6px; }
+  .bcm-meta { font-size: 12px; color: var(--ink-soft); display: flex; flex-wrap: wrap; gap: 8px 12px; }
+  .bcm-meta strong { color: var(--ink); font-weight: 600; }
+  .bcm-note { background: rgba(184,149,106,0.08); border-left: 2px solid var(--gold); padding: 5px 8px; margin-top: 6px; border-radius: 4px; font-size: 12px; }
+  .bcm-note-label { font-weight: 600; color: var(--ink-soft); font-size: 11px; }
+
+  /* Кнопка действий снизу */
+  .bcm-actions {
+    margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap;
+  }
+  .bcm-actions button {
+    padding: 8px 12px; font-size: 12px; font-weight: 600;
+    border-radius: 6px; border: 1px solid var(--line); background: white;
+    min-height: 36px;
+  }
+  .bcm-actions button.primary { background: var(--accent); color: white; border-color: var(--accent); }
+  .bcm-actions button.purple { background: #8b5cf6; color: white; border-color: #8b5cf6; }
+  .bcm-actions button.gray { background: var(--bg-alt); color: var(--ink); }
+
+  /* Плавающая кнопка "+ Гость пришёл" */
+  .fab {
+    position: fixed; bottom: 16px; right: 16px;
+    background: #8b5cf6; color: white;
+    padding: 14px 20px; border-radius: 999px;
+    font-size: 14px; font-weight: 600;
+    box-shadow: 0 4px 12px rgba(139,92,246,0.4);
+    z-index: 30;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .fab:active { transform: scale(0.96); }
+
+  /* Бейдж только просмотр */
+  .readonly-badge {
+    display: inline-block; font-size: 11px; font-weight: 600;
+    color: var(--warn); background: #fef3c7;
+    padding: 3px 10px; border-radius: 6px; margin-left: 8px;
+  }
+
+  /* Модальные окна */
+  .overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    z-index: 100; display: none; align-items: flex-end; justify-content: center;
+  }
+  .overlay.active { display: flex; }
+  .sheet {
+    background: white; width: 100%; max-width: 500px;
+    border-radius: 16px 16px 0 0; padding: 16px;
+    max-height: 90vh; overflow-y: auto;
+    animation: slideUp 0.2s ease-out;
+  }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .sheet-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .sheet-title { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600; }
+  .sheet-close { font-size: 22px; color: var(--ink-soft); padding: 4px 8px; }
+
+  /* Login форма */
+  .login-overlay {
+    position: fixed; inset: 0; background: var(--bg);
+    z-index: 200; display: flex; align-items: center; justify-content: center;
+    padding: 16px;
+  }
+  .login-overlay.hidden { display: none; }
+  .login-box {
+    width: 100%; max-width: 360px; background: white;
+    border-radius: 14px; padding: 24px;
+    box-shadow: var(--shadow-md);
+  }
+  .login-title {
+    font-family: 'Fraunces', serif; font-size: 22px; font-weight: 600;
+    text-align: center; margin-bottom: 4px;
+  }
+  .login-subtitle { text-align: center; color: var(--ink-soft); font-size: 13px; margin-bottom: 20px; }
+  .login-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 14px; }
+  .login-tabs button {
+    padding: 10px; background: white; border: 1px solid var(--line); border-radius: 8px;
+    font-size: 13px; font-weight: 500; color: var(--ink); min-height: 44px;
+  }
+  .login-tabs button.active { background: var(--accent); color: white; border-color: var(--accent); }
+  .login-tabs button.admin { background: var(--gold); color: white; border-color: var(--gold); }
+  .login-tabs button.admin.active { box-shadow: 0 0 0 3px rgba(184,149,106,0.3); }
+  .login-field { margin-top: 12px; }
+  .login-field label { display: block; font-size: 12px; font-weight: 600; color: var(--ink-soft); margin-bottom: 4px; text-transform: uppercase; }
+  .login-field input {
+    width: 100%; padding: 12px; font-size: 16px; border: 1px solid var(--line);
+    border-radius: 8px; background: white; min-height: 44px;
+  }
+  .login-error { color: var(--danger); font-size: 12px; margin-top: 6px; display: none; }
+  .login-error.show { display: block; }
+  .login-btn {
+    width: 100%; padding: 14px; background: var(--accent); color: white;
+    border-radius: 8px; font-size: 15px; font-weight: 600; margin-top: 16px;
+    min-height: 48px;
+  }
+  .login-hint {
+    text-align: center; font-size: 11px; color: var(--ink-soft);
+    margin-top: 14px; line-height: 1.4;
+  }
+  .login-hint a { color: var(--accent); text-decoration: underline; cursor: pointer; }
+
+  /* Toast уведомления */
+  .toast {
+    position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+    background: var(--ink); color: white; padding: 10px 16px;
+    border-radius: 8px; font-size: 13px; z-index: 300;
+    box-shadow: var(--shadow-md); max-width: 90%;
+    animation: toastIn 0.2s, toastOut 0.2s 2.5s forwards;
+  }
+  .toast.error { background: var(--danger); }
+  .toast.success { background: var(--ok); }
+  @keyframes toastIn { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }
+  @keyframes toastOut { to { opacity: 0; transform: translate(-50%, 20px); } }
+
+  /* Кнопка действия на столе/брони */
+  .status-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  }
+  .status-grid button {
+    padding: 12px; font-size: 13px; font-weight: 600;
+    border-radius: 8px; border: 1px solid var(--line); background: white;
+    min-height: 48px; display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .status-grid button.active { box-shadow: inset 0 0 0 2px var(--accent); }
+  .status-grid .status-dot {
+    width: 10px; height: 10px; border-radius: 50%; display: inline-block;
+  }
+
+  /* Форма walkin */
+  .field-row { margin-bottom: 12px; }
+  .field-row label { display: block; font-size: 12px; font-weight: 600; color: var(--ink-soft); margin-bottom: 4px; text-transform: uppercase; }
+  .field-row input, .field-row select, .field-row textarea {
+    width: 100%; padding: 10px; font-size: 16px; border: 1px solid var(--line);
+    border-radius: 8px; background: white; min-height: 44px;
+  }
+  .field-row textarea { min-height: 60px; resize: vertical; }
+  .field-row .req { color: var(--danger); }
+</style>
+</head>
+<body>
+<div class="test-banner-mobile">ТЕСТОВАЯ СРЕДА</div>
+
+<!-- ЭКРАН ВХОДА -->
+<div class="login-overlay" id="login-overlay">
+  <div class="login-box">
+    <div class="login-title">Бронирование</div>
+    <div class="login-subtitle">Мобильная версия для хостес</div>
+    <div class="login-field">
+      <label>Ресторан</label>
+      <div class="login-tabs" id="login-tabs">
+        <button class="active" data-rest="dobrograd">Доброград</button>
+        <button data-rest="terrasa">Терраса</button>
+        <button data-rest="galereya">Галерея</button>
+        <button class="admin" data-rest="admin">🔑 Управляющий</button>
+      </div>
+    </div>
+    <div class="login-field">
+      <label>Пароль</label>
+      <input type="password" id="login-password" autocomplete="new-password" autocorrect="off" autocapitalize="none" spellcheck="false" inputmode="text" name="restaurant-passcode">
+      <div class="login-error" id="login-error">Неверный пароль</div>
+    </div>
+    <button class="login-btn" id="login-submit">Войти</button>
+    <div class="login-hint">
+      Полная версия для управления — на <a id="link-to-desktop">ноутбуке</a>
+    </div>
+  </div>
+</div>
+
+<!-- ОСНОВНОЙ ИНТЕРФЕЙС -->
+<div id="app" style="display:none;">
+
+  <div class="topbar">
+    <div class="topbar-title">Бронирование</div>
+    <div class="conn-indicator" id="conn-indicator">
+      <span class="conn-dot"></span>
+    </div>
+    <button class="user-btn" id="user-btn">Хостес</button>
+  </div>
+
+  <div class="rest-tabs" id="rest-tabs">
+    <button class="active" data-rest="dobrograd">Доброград</button>
+    <button data-rest="terrasa">Терраса</button>
+    <button data-rest="galereya">Галерея</button>
+  </div>
+
+  <div class="date-bar">
+    <div class="date-display" id="date-display">Сегодня</div>
+    <div class="date-nav">
+      <button id="date-prev">←</button>
+      <button class="today" id="date-today">Сегодня</button>
+      <button id="date-next">→</button>
+      <button id="date-pick">📅</button>
+    </div>
+    <input type="date" class="date-input" id="date-input">
+  </div>
+
+  <div class="schema-section">
+    <div class="schema-title">
+      <span>План посадки</span>
+      <span id="schema-stats" style="font-size:11px;"></span>
+    </div>
+    <div class="schema-wrap" id="schema-wrap">
+      <div class="schema-canvas" id="schema-canvas"></div>
+    </div>
+  </div>
+
+  <div class="list-section">
+    <div class="list-title">
+      <span>На день</span>
+      <span id="list-count">0</span>
+    </div>
+    <div id="bookings-list"></div>
+  </div>
+
+  <button class="fab" id="btn-walkin">
+    <span>👤</span> Гость пришёл
+  </button>
+
+</div>
+
+<!-- ОКНО НАСТРОЙКИ ПОДКЛЮЧЕНИЯ -->
+<div class="overlay" id="api-config-overlay">
+  <div class="sheet">
+    <div class="sheet-header">
+      <div class="sheet-title">Настроить подключение</div>
+      <button class="sheet-close" id="api-config-close">✕</button>
+    </div>
+    <div style="font-size:13px;color:var(--ink-soft);margin-bottom:14px;line-height:1.4;">
+      Введи те же данные, что используешь на ноутбуке. После сохранения подключение будет работать.
+    </div>
+    <div class="field-row">
+      <label>URL Apps Script<span class="req">*</span></label>
+      <textarea id="api-url-input" placeholder="https://script.google.com/macros/s/.../exec" style="min-height:80px;font-size:13px;word-break:break-all;" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" name="apps-script-endpoint" data-private="true"></textarea>
+      <div style="font-size:11px;color:var(--ink-soft);margin-top:4px;">Длинная ссылка, заканчивается на /exec</div>
+    </div>
+    <div class="field-row">
+      <label>Пароль API<span class="req">*</span></label>
+      <input type="password" id="api-password-input" placeholder="Пароль из Apps Script" autocomplete="new-password" autocorrect="off" autocapitalize="none" spellcheck="false" name="apps-script-token">
+      <div style="font-size:11px;color:var(--ink-soft);margin-top:4px;">Тот же пароль что задан в Apps Script</div>
+    </div>
+    <div id="api-test-status" style="display:none;padding:10px;border-radius:8px;margin-top:10px;font-size:13px;text-align:center;"></div>
+    <button class="login-btn" id="api-save-btn">Подключить</button>
+    <div style="font-size:11px;color:var(--ink-soft);text-align:center;margin-top:10px;">Эти данные есть на ноутбуке в окне «Подключение к Google Sheets»</div>
+  </div>
+</div>
+
+<!-- ОКНО ДЕЙСТВИЙ ПО БРОНИ (смена статуса) -->
+<div class="overlay" id="action-overlay">
+  <div class="sheet">
+    <div class="sheet-header">
+      <div class="sheet-title" id="action-title">Бронь</div>
+      <button class="sheet-close" id="action-close">✕</button>
+    </div>
+    <div id="action-body"></div>
+  </div>
+</div>
+
+<!-- ОКНО СВОБОДНОЙ ПОСАДКИ -->
+<div class="overlay" id="walkin-overlay">
+  <div class="sheet">
+    <div class="sheet-header">
+      <div class="sheet-title" id="walkin-title">Гость пришёл</div>
+      <button class="sheet-close" id="walkin-close">✕</button>
+    </div>
+    <div class="field-row">
+      <label>Имя гостя</label>
+      <input type="text" id="walkin-name" placeholder="Гость" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" name="walkin-name-field">
+    </div>
+    <div class="field-row">
+      <label>Гостей<span class="req">*</span></label>
+      <input type="number" id="walkin-guests" min="1" max="50" value="2" autocomplete="off" name="walkin-guests-field">
+    </div>
+    <div class="field-row">
+      <label>Стол<span class="req">*</span></label>
+      <div id="walkin-tables" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+    </div>
+    <div class="field-row">
+      <label>Время посадки</label>
+      <input type="time" id="walkin-time" autocomplete="off" name="walkin-time-field">
+    </div>
+    <div class="field-row">
+      <label>Длительность (ориент.)</label>
+      <select id="walkin-duration">
+        <option value="1.5">1ч 30м</option>
+        <option value="2">2ч</option>
+        <option value="2.25" selected>2ч 15м</option>
+        <option value="3">3ч</option>
+        <option value="4">4ч</option>
+        <option value="allday">Весь день</option>
+      </select>
+    </div>
+    <div class="field-row">
+      <label>Комментарий</label>
+      <textarea id="walkin-comment" placeholder="Необязательно" autocomplete="off" autocorrect="off" autocapitalize="sentences" spellcheck="false" name="walkin-comment-field"></textarea>
+    </div>
+    <button class="login-btn" id="walkin-save">Посадить гостя</button>
+  </div>
+</div>
+
+<script>
+// ============================================================================
+// КОНСТАНТЫ И КОНФИГУРАЦИЯ
+// ============================================================================
+const API_CONFIG_KEY = 'reservation-app-TEST-api-config';   // тот же ключ что у основного приложения!
+const SESSION_KEY = 'mobile-app-TEST-session';
+const SESSION_DURATION = 12 * 60 * 60 * 1000;
+
+// Пароли ресторанов — должны совпадать с основным приложением
+const RESTAURANT_PASSWORDS = {
+  dobrograd: 'dobrograd2026',
+  terrasa: 'terrasa2026',
+  galereya: 'galereya2026',
+};
+// Пароль управляющего по умолчанию (можно переопределить из настроек на сервере)
+let ADMIN_PASSWORD = 'admin';
+
+const STATUS_LABELS = {
+  new: 'Новая',
+  confirmed: 'Подтверждена',
+  arrived: 'Гость пришёл',
+  late: 'Опоздание',
+  cancelled: 'Отмена',
+  noshow: 'Не явился',
+  done: 'Завершена',
+};
+
+const STATUS_ICONS = {
+  new: '🆕',
+  confirmed: '✓',
+  arrived: '🪑',
+  late: '⏰',
+  cancelled: '✕',
+  noshow: '👻',
+  done: '✓✓',
+};
+
+// ============================================================================
+// СОСТОЯНИЕ
+// ============================================================================
+const STATE = {
+  currentRestaurant: 'dobrograd',
+  currentDate: todayISO(),
+  bookings: [],
+  schemas: {},
+  userRestaurant: null,
+  isAdmin: false,
+  loggedIn: false,
+};
+
+function canEdit() {
+  if (STATE.isAdmin) return true;
+  return STATE.userRestaurant === STATE.currentRestaurant;
+}
+
+// ============================================================================
+// УТИЛИТЫ
+// ============================================================================
+function todayISO() {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return y + '-' + m + '-' + day;
+}
+
+function normalizeDate(val) {
+  if (!val) return '';
+  if (val instanceof Date) {
+    const y = val.getFullYear();
+    const m = String(val.getMonth() + 1).padStart(2, '0');
+    const d = String(val.getDate()).padStart(2, '0');
+    return y + '-' + m + '-' + d;
+  }
+  let s = String(val).trim();
+  let m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (m) return m[1] + '-' + m[2] + '-' + m[3];
+  m = s.match(/^(\d{2})\.(\d{2})\.(\d{4})/);
+  if (m) return m[3] + '-' + m[2] + '-' + m[1];
+  m = s.match(/^(\d{2})\/(\d{2})\/(\d{4})/);
+  if (m) return m[3] + '-' + m[2] + '-' + m[1];
+  const parsed = new Date(s);
+  if (!isNaN(parsed.getTime())) {
+    const y = parsed.getFullYear();
+    const mo = String(parsed.getMonth() + 1).padStart(2, '0');
+    const d = String(parsed.getDate()).padStart(2, '0');
+    return y + '-' + mo + '-' + d;
+  }
+  return s;
+}
+
+function normalizeTime(val) {
+  if (!val) return '';
+  if (val instanceof Date) {
+    return String(val.getHours()).padStart(2, '0') + ':' + String(val.getMinutes()).padStart(2, '0');
+  }
+  const m = String(val).trim().match(/(\d{1,2}):(\d{2})/);
+  if (m) return m[1].padStart(2, '0') + ':' + m[2];
+  return String(val);
+}
+
+function timeToMinutes(t) {
+  if (!t) return 0;
+  const [h, m] = String(t).split(':').map(Number);
+  return h * 60 + (m || 0);
+}
+
+function endTime(start, dur) {
+  if (dur === 'allday' || String(dur) === 'allday') return '23:00';
+  const mins = timeToMinutes(start) + Math.round(parseFloat(dur || 2.25) * 60);
+  return String(Math.floor(mins/60)).padStart(2,'0') + ':' + String(mins%60).padStart(2,'0');
+}
+
+function formatRuDate(iso) {
+  const months = ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+  const days = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
+  const d = new Date(iso + 'T12:00:00');
+  if (isNaN(d.getTime())) return iso;
+  return d.getDate() + ' ' + months[d.getMonth()] + ', ' + days[d.getDay()];
+}
+
+function uid() {
+  return 'b_' + Math.random().toString(36).slice(2, 12) + Date.now().toString(36).slice(-4);
+}
+
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// Защита от случайной вставки URL и других подозрительных ссылок
+// в поля имени, комментария и т.п. (например через автозаполнение браузера)
+function sanitizeUserText(s) {
+  if (s == null) return '';
+  let t = String(s);
+  // Убираем ссылки на Apps Script (наш URL базы данных)
+  t = t.replace(/https?:\/\/script\.google\.com\/macros\/s\/[^\s]+/gi, '');
+  // Убираем любые googleusercontent.com endpoints
+  t = t.replace(/https?:\/\/[^\s]*googleusercontent[^\s]*/gi, '');
+  // Не трогаем нормальные ссылки на сайты (если хостес действительно хочет их в комментарии)
+  return t.trim();
+}
+
+function showToast(text, type) {
+  const el = document.createElement('div');
+  el.className = 'toast' + (type ? ' ' + type : '');
+  el.textContent = text;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 3000);
+}
+
+// ============================================================================
+// API КЛИЕНТ — общается с тем же Apps Script что и основное приложение
+// ============================================================================
+const PENDING_QUEUE_KEY = 'mobile-app-TEST-pending-queue';
+
+const API = {
+  url: '',
+  password: '',
+  enabled: false,
+  syncing: false,
+  lastSyncAt: null,
+  lastError: null,
+  lastConnState: 'disconnected',
+  syncIntervalId: null,
+  pendingQueue: [],  // оффлайн-очередь: список незавершённых операций
+  flushingQueue: false,
+
+  init() {
+    try {
+      const raw = localStorage.getItem(API_CONFIG_KEY);
+      if (raw) {
+        const c = JSON.parse(raw);
+        this.url = c.url || '';
+        this.password = c.password || '';
+        this.enabled = !!c.enabled;
+      } else {
+        // ТЕСТОВАЯ СРЕДА: автоподстановка тестовых настроек
+        this.url = 'https://script.google.com/macros/s/AKfycbwG_ofh-JT0SmtQo0TwgzG4Itm9eOonwWEpXakKOgV-EyOOosWUX0e1NwjPH7H6b-PZJA/exec';
+        this.password = 'test2026';
+        this.enabled = true;
+        try {
+          localStorage.setItem(API_CONFIG_KEY, JSON.stringify({
+            url: this.url, password: this.password, enabled: true
+          }));
+        } catch (e) {}
+      }
+    } catch (e) { /* ignore */ }
+    // Загружаем оффлайн-очередь
+    try {
+      const raw = localStorage.getItem(PENDING_QUEUE_KEY);
+      if (raw) this.pendingQueue = JSON.parse(raw) || [];
+    } catch (e) { this.pendingQueue = []; }
+  },
+
+  savePendingQueue() {
+    try {
+      localStorage.setItem(PENDING_QUEUE_KEY, JSON.stringify(this.pendingQueue));
+    } catch (e) { /* квота может быть исчерпана */ }
+  },
+
+  addToPendingQueue(action, payload) {
+    this.pendingQueue.push({ action, payload, queuedAt: Date.now() });
+    this.savePendingQueue();
+    updatePendingBadge();
+  },
+
+  async flushPendingQueue() {
+    if (this.flushingQueue || this.pendingQueue.length === 0) return;
+    if (this.lastConnState !== 'connected') return;
+    this.flushingQueue = true;
+    try {
+      while (this.pendingQueue.length > 0) {
+        const item = this.pendingQueue[0];
+        try {
+          await this.post(item.action, item.payload);
+          // Успех — удаляем из очереди
+          this.pendingQueue.shift();
+          this.savePendingQueue();
+        } catch (e) {
+          // Сеть всё ещё проблемная — выходим, попробуем потом
+          break;
+        }
+      }
+    } finally {
+      this.flushingQueue = false;
+      updatePendingBadge();
+    }
+  },
+
+  async getAll() {
+    if (!this.url) throw new Error('URL не задан');
+    const r = await fetch(this.url + '?action=getAll', { method: 'GET', redirect: 'follow' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const data = await r.json();
+    if (!data.ok) throw new Error(data.error || 'Unknown');
+    return data;
+  },
+
+  async post(action, payload) {
+    if (!this.url) throw new Error('URL не задан');
+    const body = JSON.stringify({ action, password: this.password, ...payload });
+    const r = await fetch(this.url, {
+      method: 'POST', mode: 'cors', redirect: 'follow',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: body,
+    });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const data = await r.json();
+    if (!data.ok) throw new Error(data.error || 'Unknown');
+    return data;
+  },
+
+  async saveBooking(booking) { return this.post('saveBooking', { booking }); },
+  async saveWalkin(walkin) { return this.post('saveWalkin', { walkin }); },
+
+  setConnState(state, error) {
+    this.lastConnState = state;
+    this.lastError = error || null;
+    updateConnIndicator();
+  }
+};
+
+function updateConnIndicator() {
+  const ind = document.getElementById('conn-indicator');
+  if (!ind) return;
+  ind.classList.remove('connected', 'connecting', 'error');
+  if (API.lastConnState === 'connected') ind.classList.add('connected');
+  else if (API.lastConnState === 'connecting') ind.classList.add('connecting');
+  else if (API.lastConnState === 'error') ind.classList.add('error');
+  updatePendingBadge();
+}
+
+// Бейдж "N изменений ждут отправки"
+function updatePendingBadge() {
+  const ind = document.getElementById('conn-indicator');
+  if (!ind) return;
+  let badge = ind.querySelector('.pending-badge');
+  const count = API.pendingQueue ? API.pendingQueue.length : 0;
+  if (count > 0) {
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.className = 'pending-badge';
+      badge.style.cssText = 'background:#f59e0b;color:white;border-radius:999px;padding:1px 6px;font-size:10px;font-weight:700;margin-left:4px;';
+      ind.appendChild(badge);
+    }
+    badge.textContent = '⏳ ' + count;
+  } else if (badge) {
+    badge.remove();
+  }
+}
+
+// ============================================================================
+// СЕССИЯ (12 часов)
+// ============================================================================
+function saveLoginSession() {
+  try {
+    localStorage.setItem(SESSION_KEY, JSON.stringify({
+      userRestaurant: STATE.userRestaurant,
+      isAdmin: STATE.isAdmin,
+      savedAt: Date.now(),
+    }));
+  } catch (e) { /* */ }
+}
+
+function loadLoginSession() {
+  try {
+    const raw = localStorage.getItem(SESSION_KEY);
+    if (!raw) return false;
+    const s = JSON.parse(raw);
+    if (!s || !s.savedAt) return false;
+    if (Date.now() - s.savedAt > SESSION_DURATION) {
+      localStorage.removeItem(SESSION_KEY);
+      return false;
+    }
+    STATE.userRestaurant = s.userRestaurant || 'dobrograd';
+    STATE.currentRestaurant = STATE.userRestaurant;
+    STATE.isAdmin = !!s.isAdmin;
+    STATE.loggedIn = true;
+    return true;
+  } catch (e) { return false; }
+}
+
+function clearLoginSession() {
+  try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
+}
+
+// ============================================================================
+// ВХОД
+// ============================================================================
+let loginSelectedRest = 'dobrograd';
+
+document.querySelectorAll('#login-tabs button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#login-tabs button').forEach(b => b.classList.toggle('active', b === btn));
+    loginSelectedRest = btn.dataset.rest;
+    document.getElementById('login-error').classList.remove('show');
+    document.getElementById('login-password').focus();
+  });
+});
+
+function tryLogin() {
+  const pwd = document.getElementById('login-password').value;
+  const errEl = document.getElementById('login-error');
+
+  if (loginSelectedRest === 'admin') {
+    if (pwd === ADMIN_PASSWORD) {
+      STATE.isAdmin = true;
+      STATE.userRestaurant = 'dobrograd';
+      STATE.currentRestaurant = 'dobrograd';
+      STATE.loggedIn = true;
+      saveLoginSession();
+      onLoginSuccess();
+      return;
+    }
+    errEl.classList.add('show');
+    return;
+  }
+
+  if (pwd === RESTAURANT_PASSWORDS[loginSelectedRest]) {
+    STATE.userRestaurant = loginSelectedRest;
+    STATE.currentRestaurant = loginSelectedRest;
+    STATE.loggedIn = true;
+    saveLoginSession();
+    onLoginSuccess();
+    return;
+  }
+  errEl.classList.add('show');
+}
+
+document.getElementById('login-submit').addEventListener('click', tryLogin);
+document.getElementById('login-password').addEventListener('keydown', e => {
+  if (e.key === 'Enter') tryLogin();
+});
+
+function onLoginSuccess() {
+  document.getElementById('login-overlay').classList.add('hidden');
+  document.getElementById('app').style.display = '';
+  if (STATE.isAdmin) {
+    document.getElementById('user-btn').textContent = 'Управляющий';
+  } else {
+    document.getElementById('user-btn').textContent = 'Хостес';
+  }
+  // Активируем правильную вкладку
+  document.querySelectorAll('#rest-tabs button').forEach(b => {
+    b.classList.toggle('active', b.dataset.rest === STATE.currentRestaurant);
+  });
+  // Стартуем загрузку
+  initialLoad();
+}
+
+function logout() {
+  if (!confirm('Выйти из приложения?')) return;
+  STATE.isAdmin = false;
+  STATE.loggedIn = false;
+  STATE.userRestaurant = null;
+  clearLoginSession();
+  if (API.syncIntervalId) clearInterval(API.syncIntervalId);
+  API.syncIntervalId = null;
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-overlay').classList.remove('hidden');
+  document.getElementById('login-password').value = '';
+  document.getElementById('login-error').classList.remove('show');
+}
+
+document.getElementById('user-btn').addEventListener('click', logout);
+
+// ============================================================================
+// СИНХРОНИЗАЦИЯ ДАННЫХ
+// ============================================================================
+async function initialLoad() {
+  API.init();
+  if (!API.enabled) {
+    // Нет настроек на этом устройстве — показываем кнопку настройки
+    document.getElementById('schema-canvas').innerHTML =
+      '<div style="padding:20px;text-align:center;color:var(--ink-soft);">' +
+      '<div style="font-size:14px;margin-bottom:14px;line-height:1.5;">Это устройство ещё не подключено к Google Sheets.<br>Данные для подключения есть на ноутбуке.</div>' +
+      '<button class="login-btn" id="btn-setup-api" style="max-width:280px;margin:0 auto;">Настроить подключение</button>' +
+      '</div>';
+    document.getElementById('btn-setup-api').addEventListener('click', openApiConfig);
+    return;
+  }
+  API.setConnState('connecting');
+  try {
+    const data = await API.getAll();
+    applyServerData(data);
+    API.lastSyncAt = new Date();
+    API.setConnState('connected');
+    renderAll();
+    startSync();
+  } catch (e) {
+    API.setConnState('error', String(e.message || e));
+    showToast('Ошибка: ' + (e.message || e), 'error');
+    // Если ошибка подключения — позволим перенастроить
+    setTimeout(() => {
+      const canvas = document.getElementById('schema-canvas');
+      if (canvas && !canvas.querySelector('.zone-mobile')) {
+        canvas.innerHTML =
+          '<div style="padding:20px;text-align:center;color:var(--ink-soft);">' +
+          '<div style="font-size:14px;margin-bottom:14px;line-height:1.5;color:var(--danger);">Не удалось подключиться</div>' +
+          '<button class="login-btn" id="btn-setup-api-2" style="max-width:280px;margin:0 auto;">Изменить настройки</button>' +
+          '</div>';
+        document.getElementById('btn-setup-api-2').addEventListener('click', openApiConfig);
+      }
+    }, 500);
+  }
+}
+
+// ============================================================================
+// ОКНО НАСТРОЙКИ ПОДКЛЮЧЕНИЯ
+// ============================================================================
+function openApiConfig() {
+  document.getElementById('api-url-input').value = API.url || '';
+  document.getElementById('api-password-input').value = API.password || '';
+  document.getElementById('api-test-status').style.display = 'none';
+  document.getElementById('api-config-overlay').classList.add('active');
+}
+
+document.getElementById('api-config-close').addEventListener('click', () => {
+  document.getElementById('api-config-overlay').classList.remove('active');
+});
+
+document.getElementById('api-save-btn').addEventListener('click', async () => {
+  const url = document.getElementById('api-url-input').value.trim();
+  const password = document.getElementById('api-password-input').value;
+  const statusEl = document.getElementById('api-test-status');
+
+  if (!url || !password) {
+    statusEl.style.display = 'block';
+    statusEl.style.background = '#fee2e2';
+    statusEl.style.color = '#991b1b';
+    statusEl.textContent = '✗ Заполни оба поля';
+    return;
+  }
+  if (!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec/.test(url)) {
+    statusEl.style.display = 'block';
+    statusEl.style.background = '#fee2e2';
+    statusEl.style.color = '#991b1b';
+    statusEl.textContent = '✗ URL должен начинаться с https://script.google.com/macros/s/ и заканчиваться на /exec';
+    return;
+  }
+
+  statusEl.style.display = 'block';
+  statusEl.style.background = '#fef3c7';
+  statusEl.style.color = '#92400e';
+  statusEl.textContent = '⏳ Подключение...';
+
+  // Сохраняем настройки
+  API.url = url;
+  API.password = password;
+  API.enabled = true;
+  try {
+    localStorage.setItem(API_CONFIG_KEY, JSON.stringify({
+      url: url, password: password, enabled: true
+    }));
+  } catch (e) {}
+
+  // Пробуем загрузить
+  try {
+    const data = await API.getAll();
+    applyServerData(data);
+    API.lastSyncAt = new Date();
+    API.setConnState('connected');
+    statusEl.style.background = '#d1fae5';
+    statusEl.style.color = '#065f46';
+    statusEl.textContent = '✓ Подключено! Загружено: ' + STATE.bookings.length + ' броней';
+    setTimeout(() => {
+      document.getElementById('api-config-overlay').classList.remove('active');
+      renderAll();
+      startSync();
+    }, 1200);
+  } catch (e) {
+    statusEl.style.background = '#fee2e2';
+    statusEl.style.color = '#991b1b';
+    statusEl.textContent = '✗ Не удалось подключиться: ' + (e.message || e);
+    API.enabled = false;
+  }
+});
+
+function applyServerData(data) {
+  if (!data) return;
+  const all = [];
+  if (data.bookings) {
+    Object.keys(data.bookings).forEach(restId => {
+      (data.bookings[restId] || []).forEach(b => {
+        b.restaurant = restId;
+        b.date = normalizeDate(b.date);
+        b.time = normalizeTime(b.time);
+        all.push(b);
+      });
+    });
+  }
+  if (data.walkins) {
+    data.walkins.forEach(w => {
+      w.isWalkin = true;
+      w.date = normalizeDate(w.date);
+      w.time = normalizeTime(w.time);
+      all.push(w);
+    });
+  }
+  STATE.bookings = all;
+
+  if (data.schemas) {
+    STATE.schemas = data.schemas;
+  }
+  if (data.settings && data.settings.adminPassword) {
+    ADMIN_PASSWORD = data.settings.adminPassword;
+  }
+}
+
+async function syncData() {
+  if (!API.enabled || API.syncing) return;
+  // Если пользователь активно редактирует — пропускаем рендер чтобы не сбросить форму
+  const userActive = isUserActivelyEditing();
+  API.syncing = true;
+  try {
+    const data = await API.getAll();
+    applyServerData(data);
+    API.lastSyncAt = new Date();
+    API.setConnState('connected');
+    if (!userActive) renderAll();
+    // Восстановление связи — пробуем отправить накопленную очередь
+    API.flushPendingQueue();
+  } catch (e) {
+    API.setConnState('error', String(e.message || e));
+  } finally {
+    API.syncing = false;
+  }
+}
+
+// Активно ли пользователь редактирует форму прямо сейчас?
+// Если да — не обновляем UI чтобы не сбросить вводимые данные.
+function isUserActivelyEditing() {
+  // Если открыта форма walkin или окно действий — считаем что редактирует
+  const walkinOpen = document.getElementById('walkin-overlay').classList.contains('active');
+  const actionOpen = document.getElementById('action-overlay').classList.contains('active');
+  const apiCfgOpen = document.getElementById('api-config-overlay').classList.contains('active');
+  return walkinOpen || actionOpen || apiCfgOpen;
+}
+
+function startSync() {
+  if (API.syncIntervalId) clearInterval(API.syncIntervalId);
+  API.syncIntervalId = setInterval(syncData, 5000);
+}
+
+// Принудительная синхронизация по тапу на индикатор
+document.getElementById('conn-indicator').addEventListener('click', () => {
+  syncData();
+  showToast('Синхронизация...', null);
+});
+
+// ============================================================================
+// СТАРТ
+// ============================================================================
+document.getElementById('link-to-desktop').addEventListener('click', () => {
+  window.location.href = 'index.html';
+});
+
+// Попытка восстановить сессию
+if (loadLoginSession()) {
+  onLoginSuccess();
+}
+
+// ============================================================================
+// СТАБЫ для рендеринга (будут заполнены на следующем этапе)
+// ============================================================================
+function renderAll() {
+  renderDate();
+  renderRestTabs();
+  renderSchema();
+  renderBookingsList();
+  renderReadonlyBadge();
+}
+
+function renderDate() {
+  const el = document.getElementById('date-display');
+  if (el) el.textContent = formatRuDate(STATE.currentDate);
+  const inp = document.getElementById('date-input');
+  if (inp) inp.value = STATE.currentDate;
+}
+
+function renderRestTabs() {
+  document.querySelectorAll('#rest-tabs button').forEach(b => {
+    b.classList.toggle('active', b.dataset.rest === STATE.currentRestaurant);
+  });
+}
+
+function renderReadonlyBadge() {
+  // Если в шапке списка нет бейджа — добавим
+  let badge = document.getElementById('readonly-badge');
+  const titleEl = document.querySelector('.schema-title span:first-child');
+  if (!canEdit()) {
+    if (!badge && titleEl) {
+      titleEl.innerHTML = 'План посадки <span class="readonly-badge" id="readonly-badge">👁 только просмотр</span>';
+    }
+  } else {
+    if (badge) badge.remove();
+    if (titleEl && titleEl.textContent !== 'План посадки') titleEl.textContent = 'План посадки';
+  }
+}
+
+// ============================================================================
+// СХЕМА ЗАЛА
+// ============================================================================
+function bookingsForCurrentDay() {
+  return STATE.bookings.filter(b =>
+    b.restaurant === STATE.currentRestaurant &&
+    b.date === STATE.currentDate &&
+    !['cancelled', 'noshow', 'done'].includes(b.status)
+  );
+}
+
+function statusClass(b) {
+  if (b.isWalkin) return b.status === 'done' ? 'done' : 'walkin';
+  return b.status || 'new';
+}
+
+function renderSchema() {
+  const canvas = document.getElementById('schema-canvas');
+  const statsEl = document.getElementById('schema-stats');
+  canvas.innerHTML = '';
+
+  const schema = STATE.schemas[STATE.currentRestaurant];
+  if (!schema || !schema.zones) {
+    canvas.innerHTML = '<div style="padding:20px;text-align:center;color:var(--ink-soft);">Схема зала ещё не загружена</div>';
+    if (statsEl) statsEl.textContent = '';
+    return;
+  }
+
+  const active = bookingsForCurrentDay();
+  // Группируем брони по столам
+  const tableBookings = {};
+  active.forEach(b => {
+    (b.tables || []).forEach(t => {
+      if (!tableBookings[t]) tableBookings[t] = [];
+      tableBookings[t].push(b);
+    });
+  });
+
+  // Считаем общую статистику дня
+  const occupiedTables = Object.keys(tableBookings).length;
+  let totalTables = 0;
+  schema.zones.forEach(z => totalTables += (z.tables || []).length);
+  if (statsEl) statsEl.textContent = occupiedTables + ' из ' + totalTables + ' столов занято';
+
+  // Размещаем зоны горизонтально
+  schema.zones.forEach(zone => {
+    const zoneEl = document.createElement('div');
+    zoneEl.className = 'zone-mobile';
+
+    const nameEl = document.createElement('div');
+    nameEl.className = 'zone-mobile-name';
+    nameEl.textContent = zone.name;
+    zoneEl.appendChild(nameEl);
+
+    const statsEl2 = document.createElement('div');
+    statsEl2.className = 'zone-mobile-stats';
+    let zoneCap = 0;
+    (zone.tables || []).forEach(t => zoneCap += (parseInt(t.cap) || 0));
+    const zoneOccupied = (zone.tables || []).filter(t => tableBookings[t.id]).length;
+    statsEl2.textContent = zoneOccupied + '/' + (zone.tables || []).length + ' занято · до ' + zoneCap + ' чел.';
+    zoneEl.appendChild(statsEl2);
+
+    const zoneCanvas = document.createElement('div');
+    zoneCanvas.className = 'zone-canvas-mobile';
+
+    // Размер канвы — по максимальным координатам столов
+    let maxX = 0, maxY = 0;
+    (zone.tables || []).forEach(t => {
+      maxX = Math.max(maxX, (t.x || 0) + (t.w || 100) + 6);
+      maxY = Math.max(maxY, (t.y || 0) + (t.h || 75) + 6);
+    });
+    // Подгоняем под мобильный — масштабируем чтобы вошла зона по ширине экрана
+    const scale = 0.55; // 55% от оригинала — компактно но читаемо
+    zoneCanvas.style.width = (maxX * scale) + 'px';
+    zoneCanvas.style.height = (maxY * scale) + 'px';
+
+    (zone.tables || []).forEach(t => {
+      const cell = document.createElement('div');
+      const tBookings = tableBookings[t.id] || [];
+      const isOccupied = tBookings.length > 0;
+      let cls = 'table-m';
+      if (t.shape === 'round') cls += ' shape-round';
+      if (isOccupied) cls += ' ' + statusClass(tBookings[0]);
+      cell.className = cls;
+
+      cell.style.left = ((t.x || 0) * scale) + 'px';
+      cell.style.top = ((t.y || 0) * scale) + 'px';
+      cell.style.width = ((t.w || 100) * scale) + 'px';
+      cell.style.height = ((t.h || 75) * scale) + 'px';
+
+      let inner = '<div class="table-m-num">' + escapeHtml(t.id) + '</div>';
+      if (isOccupied) {
+        const b = tBookings[0];
+        const timeStr = b.duration === 'allday' ? 'весь день' : (b.time || '');
+        const nameShort = (b.name || '').slice(0, 10);
+        inner += '<div class="table-m-info">' + escapeHtml(timeStr) + '<br>' + escapeHtml(nameShort) + '</div>';
+        if (tBookings.length > 1) {
+          inner += '<div class="table-m-info" style="color:#666;">+' + (tBookings.length - 1) + '</div>';
+        }
+      } else {
+        inner += '<div class="table-m-info" style="color:#999;">' + (t.cap || 0) + '</div>';
+      }
+      cell.innerHTML = inner;
+
+      // Тап по столу — открыть действия
+      cell.addEventListener('click', () => {
+        if (isOccupied) {
+          if (tBookings.length === 1) {
+            openBookingActions(tBookings[0]);
+          } else {
+            openMultiBookingPicker(t.id, tBookings);
+          }
+        } else {
+          // Пустой стол — предложить посадить гостя (если есть права)
+          if (canEdit()) {
+            openWalkinForm({ table: t.id });
+          } else {
+            showToast('В этом ресторане только просмотр', 'error');
+          }
+        }
+      });
+
+      zoneCanvas.appendChild(cell);
+    });
+
+    zoneEl.appendChild(zoneCanvas);
+    canvas.appendChild(zoneEl);
+  });
+}
+
+// ============================================================================
+// СПИСОК БРОНЕЙ
+// ============================================================================
+function renderBookingsList() {
+  const list = document.getElementById('bookings-list');
+  const cntEl = document.getElementById('list-count');
+  if (!list) return;
+
+  const dayBookings = STATE.bookings.filter(b =>
+    b.restaurant === STATE.currentRestaurant &&
+    b.date === STATE.currentDate
+  );
+
+  if (cntEl) cntEl.textContent = dayBookings.length;
+
+  if (dayBookings.length === 0) {
+    list.innerHTML = '<div class="list-empty">На этот день броней нет</div>';
+    return;
+  }
+
+  // Сортировка: активные сверху по времени, закрытые внизу
+  const closedStatuses = ['done', 'cancelled', 'noshow'];
+  dayBookings.sort((a, b) => {
+    const aClosed = closedStatuses.includes(a.status) ? 1 : 0;
+    const bClosed = closedStatuses.includes(b.status) ? 1 : 0;
+    if (aClosed !== bClosed) return aClosed - bClosed;
+    return (a.time || '00:00').localeCompare(b.time || '00:00');
+  });
+
+  let htmlOut = '';
+  dayBookings.forEach(b => {
+    const isClosed = closedStatuses.includes(b.status);
+    const isCake = (b.occasion || '').includes('День рождения') || (b.occasion || '').includes('Юбилей');
+    const timeText = b.duration === 'allday' ? '12:00–23:00' :
+      ((b.time || '?') + '–' + endTime(b.time, parseFloat(b.duration || 2.25)));
+    const status = b.isWalkin ? (b.status === 'done' ? 'done' : 'walkin') : (b.status || 'new');
+    const statusLabel = b.isWalkin
+      ? (b.status === 'done' ? 'Завершено' : 'Гость')
+      : (STATUS_LABELS[b.status] || b.status);
+    const tags = [];
+    if (b.preorder) tags.push('Предзаказ');
+    if (b.depositPaid) tags.push('Депозит внесён');
+    else if (b.deposit) tags.push('Депозит: ' + b.deposit + '₽');
+
+    htmlOut += '<div class="booking-card-m ' + (b.isWalkin ? 'walkin' : '') + (isClosed ? ' closed' : '') + '" data-id="' + b.id + '">' +
+      '<div class="bcm-row1">' +
+        '<span class="bcm-time">' + escapeHtml(timeText) + '</span>' +
+        '<span class="bcm-status ' + status + '">' + escapeHtml(statusLabel) + '</span>' +
+      '</div>' +
+      '<div class="bcm-name">' +
+        escapeHtml(b.name || '—') +
+        (b.vip ? '<span class="bcm-vip">VIP</span>' : '') +
+        (isCake ? '<span title="' + escapeHtml(b.occasion) + '" style="font-size:18px;margin-left:6px;">🎂</span>' : '') +
+      '</div>' +
+      '<div class="bcm-meta">' +
+        '<span><strong>' + (b.guests || 0) + '</strong> гост.</span>' +
+        '<span>стол <strong>' + escapeHtml((b.tables || []).join(', ')) + '</strong></span>' +
+        (b.phone ? '<span>' + escapeHtml(b.phone) + '</span>' : '') +
+        (b.occasion && b.occasion !== 'Обычный' ? '<span>' + escapeHtml(b.occasion) + '</span>' : '') +
+      '</div>' +
+      (b.wishes ? '<div class="bcm-note"><span class="bcm-note-label">Пожелания:</span> ' + escapeHtml(b.wishes) + '</div>' : '') +
+      (b.comment ? '<div class="bcm-note"><span class="bcm-note-label">Комментарий:</span> ' + escapeHtml(sanitizeUserText(b.comment)) + '</div>' : '') +
+      (tags.length ? '<div class="bcm-meta" style="margin-top:6px;">' + tags.map(t => '<span>' + escapeHtml(t) + '</span>').join('') + '</div>' : '') +
+    '</div>';
+  });
+  list.innerHTML = htmlOut;
+
+  // Тап по карточке = открыть действия
+  list.querySelectorAll('.booking-card-m').forEach(card => {
+    card.addEventListener('click', () => {
+      const id = card.dataset.id;
+      const b = STATE.bookings.find(x => x.id === id);
+      if (b) openBookingActions(b);
+    });
+  });
+}
+
+// ============================================================================
+// ПЕРЕКЛЮЧЕНИЕ РЕСТОРАНОВ И ДАТЫ
+// ============================================================================
+document.querySelectorAll('#rest-tabs button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    STATE.currentRestaurant = btn.dataset.rest;
+    renderAll();
+  });
+});
+
+document.getElementById('date-prev').addEventListener('click', () => {
+  const d = new Date(STATE.currentDate);
+  d.setDate(d.getDate() - 1);
+  STATE.currentDate = d.toISOString().slice(0, 10);
+  renderAll();
+});
+
+document.getElementById('date-next').addEventListener('click', () => {
+  const d = new Date(STATE.currentDate);
+  d.setDate(d.getDate() + 1);
+  STATE.currentDate = d.toISOString().slice(0, 10);
+  renderAll();
+});
+
+document.getElementById('date-today').addEventListener('click', () => {
+  STATE.currentDate = todayISO();
+  renderAll();
+});
+
+document.getElementById('date-pick').addEventListener('click', () => {
+  document.getElementById('date-input').showPicker?.() ||
+  document.getElementById('date-input').click();
+});
+
+document.getElementById('date-input').addEventListener('change', e => {
+  if (e.target.value) {
+    STATE.currentDate = e.target.value;
+    renderAll();
+  }
+});
+
+// ============================================================================
+// СТАБЫ ДЛЯ ДЕЙСТВИЙ — будут на следующем этапе
+// ============================================================================
+// ============================================================================
+// МОДАЛКИ ДЕЙСТВИЙ
+// ============================================================================
+
+// Закрытие модалок
+function closeOverlays() {
+  document.querySelectorAll('.overlay.active').forEach(o => o.classList.remove('active'));
+}
+document.getElementById('action-close').addEventListener('click', closeOverlays);
+document.getElementById('walkin-close').addEventListener('click', closeOverlays);
+document.querySelectorAll('.overlay').forEach(o => {
+  o.addEventListener('click', e => {
+    if (e.target === o) closeOverlays();
+  });
+});
+
+// ============================================================================
+// ВЫБОР ИЗ НЕСКОЛЬКИХ БРОНЕЙ НА СТОЛЕ
+// ============================================================================
+function openMultiBookingPicker(tableId, list) {
+  const overlay = document.getElementById('action-overlay');
+  document.getElementById('action-title').textContent = 'Стол ' + tableId + ' — ' + list.length + ' броней';
+
+  let htmlOut = '<div style="display:flex;flex-direction:column;gap:8px;">';
+  list.forEach(b => {
+    const isWalkin = b.isWalkin;
+    const timeText = b.duration === 'allday' ? '12:00–23:00' :
+      ((b.time || '?') + '–' + endTime(b.time, parseFloat(b.duration || 2.25)));
+    const status = isWalkin ? (b.status === 'done' ? 'done' : 'walkin') : (b.status || 'new');
+    const statusLabel = isWalkin
+      ? (b.status === 'done' ? 'Завершено' : 'Гость')
+      : (STATUS_LABELS[b.status] || b.status);
+    htmlOut += '<div class="booking-card-m" data-pick-id="' + b.id + '" style="margin:0;cursor:pointer;">' +
+      '<div class="bcm-row1">' +
+        '<span class="bcm-time">' + escapeHtml(timeText) + '</span>' +
+        '<span class="bcm-status ' + status + '">' + escapeHtml(statusLabel) + '</span>' +
+      '</div>' +
+      '<div class="bcm-name">' + escapeHtml(b.name || '—') + '</div>' +
+      '<div class="bcm-meta"><span><strong>' + (b.guests || 0) + '</strong> гост.</span></div>' +
+    '</div>';
+  });
+  htmlOut += '</div>';
+  document.getElementById('action-body').innerHTML = htmlOut;
+
+  // Клик по выбранной — открываем её действия
+  document.querySelectorAll('[data-pick-id]').forEach(el => {
+    el.addEventListener('click', () => {
+      const id = el.dataset.pickId;
+      const b = STATE.bookings.find(x => x.id === id);
+      if (b) {
+        closeOverlays();
+        setTimeout(() => openBookingActions(b), 50);
+      }
+    });
+  });
+
+  overlay.classList.add('active');
+}
+
+// ============================================================================
+// ДЕЙСТВИЯ С БРОНЬЮ — смена статуса
+// ============================================================================
+function openBookingActions(b) {
+  if (!b) return;
+  const overlay = document.getElementById('action-overlay');
+  const isWalkin = b.isWalkin;
+
+  document.getElementById('action-title').textContent = isWalkin ? 'Свободная посадка' : 'Бронь';
+
+  const timeText = b.duration === 'allday' ? '12:00–23:00' :
+    ((b.time || '?') + '–' + endTime(b.time, parseFloat(b.duration || 2.25)));
+
+  // Шапка карточки
+  let info = '<div style="margin-bottom:14px;padding:10px;background:var(--bg);border-radius:8px;">' +
+    '<div style="font-size:13px;color:var(--ink-soft);margin-bottom:4px;">' + escapeHtml(timeText) + ' · стол ' + escapeHtml((b.tables || []).join(', ')) + '</div>' +
+    '<div style="font-size:17px;font-weight:700;">' + escapeHtml(b.name || (isWalkin ? 'Гость' : '—')) + '</div>' +
+    '<div style="font-size:13px;color:var(--ink-soft);margin-top:2px;">' + (b.guests || 0) + ' гост.' +
+      (b.phone ? ' · ' + escapeHtml(b.phone) : '') +
+    '</div>';
+  if (b.occasion && b.occasion !== 'Обычный') {
+    info += '<div style="font-size:13px;margin-top:4px;">' + escapeHtml(b.occasion) + '</div>';
+  }
+  if (b.wishes) {
+    info += '<div class="bcm-note" style="margin-top:6px;"><span class="bcm-note-label">Пожелания:</span> ' + escapeHtml(b.wishes) + '</div>';
+  }
+  if (b.comment) {
+    info += '<div class="bcm-note" style="margin-top:6px;"><span class="bcm-note-label">Комментарий:</span> ' + escapeHtml(b.comment) + '</div>';
+  }
+  info += '</div>';
+
+  // Проверка прав
+  if (!canEdit()) {
+    info += '<div style="padding:14px;background:#fef3c7;color:var(--warn);border-radius:8px;text-align:center;font-size:13px;font-weight:500;">' +
+      '👁 В этом ресторане только просмотр' +
+    '</div>';
+    document.getElementById('action-body').innerHTML = info;
+    overlay.classList.add('active');
+    return;
+  }
+
+  // Кнопки смены статуса
+  if (isWalkin) {
+    // Walkin — только одна кнопка "Гость ушёл" (если не done)
+    if (b.status !== 'done') {
+      info += '<button class="login-btn" style="background:#8b5cf6;" id="walkin-done-btn">Гость ушёл (завершить)</button>';
+    } else {
+      info += '<div style="text-align:center;color:var(--ink-soft);font-size:13px;padding:14px;">Эта посадка уже завершена</div>';
+    }
+  } else {
+    // Обычная бронь — сетка статусов
+    info += '<div style="font-size:12px;color:var(--ink-soft);margin-bottom:8px;text-transform:uppercase;font-weight:600;">Изменить статус</div>';
+    info += '<div class="status-grid">';
+    const statuses = [
+      { code: 'new', label: 'Новая', dot: '#fde68a' },
+      { code: 'confirmed', label: 'Подтверждена', dot: '#86efac' },
+      { code: 'arrived', label: 'Гость пришёл', dot: '#93c5fd' },
+      { code: 'late', label: 'Опоздание', dot: '#fca5a5' },
+      { code: 'done', label: 'Завершена', dot: '#d4d4d4' },
+      { code: 'cancelled', label: 'Отмена', dot: '#fecaca' },
+      { code: 'noshow', label: 'Не явился', dot: '#d4d4d4' },
+    ];
+    statuses.forEach(s => {
+      const isActive = b.status === s.code;
+      info += '<button data-status="' + s.code + '" class="' + (isActive ? 'active' : '') + '">' +
+        '<span class="status-dot" style="background:' + s.dot + ';"></span>' +
+        escapeHtml(s.label) +
+      '</button>';
+    });
+    info += '</div>';
+  }
+
+  document.getElementById('action-body').innerHTML = info;
+
+  // Обработчики кнопок
+  if (isWalkin) {
+    const doneBtn = document.getElementById('walkin-done-btn');
+    if (doneBtn) {
+      doneBtn.addEventListener('click', () => changeBookingStatus(b, 'done'));
+    }
+  } else {
+    document.querySelectorAll('[data-status]').forEach(btn => {
+      btn.addEventListener('click', () => changeBookingStatus(b, btn.dataset.status));
+    });
+  }
+
+  overlay.classList.add('active');
+}
+
+// Смена статуса — отправка на сервер
+let statusChanging = false;
+
+async function changeBookingStatus(b, newStatus) {
+  if (statusChanging) return;
+  if (!canEdit()) {
+    showToast('В этом ресторане только просмотр', 'error');
+    return;
+  }
+  if (b.status === newStatus) {
+    closeOverlays();
+    return;
+  }
+  statusChanging = true;
+
+  // Оптимистично обновляем локально
+  const oldStatus = b.status;
+  b.status = newStatus;
+  if (!b.updatedAt) b.updatedAt = new Date().toISOString();
+  else b.updatedAt = new Date().toISOString();
+
+  closeOverlays();
+  renderAll();
+
+  // Отправляем на сервер
+  try {
+    if (b.isWalkin) {
+      await API.saveWalkin(b);
+    } else {
+      await API.saveBooking(b);
+    }
+    showToast('Статус изменён: ' + (STATUS_LABELS[newStatus] || newStatus), 'success');
+  } catch (e) {
+    // Сеть упала — добавляем в очередь, изменение в локальном STATE остаётся
+    // Это безопасно: оптимистичное обновление + повтор при восстановлении связи
+    const action = b.isWalkin ? 'saveWalkin' : 'saveBooking';
+    const payload = b.isWalkin ? { walkin: b } : { booking: b };
+    API.addToPendingQueue(action, payload);
+    showToast('Нет связи — изменение сохранено локально, отправим при восстановлении', null);
+  } finally {
+    statusChanging = false;
+  }
+}
+
+// ============================================================================
+// СВОБОДНАЯ ПОСАДКА (walkin) — создание
+// ============================================================================
+let walkinSelectedTable = null;
+
+function openWalkinForm(prefill) {
+  if (!canEdit()) {
+    showToast('В этом ресторане только просмотр', 'error');
+    return;
+  }
+  const overlay = document.getElementById('walkin-overlay');
+  walkinSelectedTable = (prefill && prefill.table) || null;
+
+  // Заполняем поля по умолчанию
+  document.getElementById('walkin-name').value = '';
+  document.getElementById('walkin-guests').value = '2';
+  document.getElementById('walkin-comment').value = '';
+  const now = new Date();
+  document.getElementById('walkin-time').value =
+    String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+  document.getElementById('walkin-duration').value = '2.25';
+
+  // Рендерим список столов с подсветкой выбранного
+  renderWalkinTables();
+
+  overlay.classList.add('active');
+}
+
+// Активная защита от вставки URL (paste, input, blur)
+function attachInputSanitizer(inputId) {
+  const el = document.getElementById(inputId);
+  if (!el || el.dataset.sanitizerAttached) return;
+  el.dataset.sanitizerAttached = '1';
+
+  // При вставке из буфера обмена — очищаем сразу
+  el.addEventListener('paste', e => {
+    setTimeout(() => {
+      const cleaned = sanitizeUserText(el.value);
+      if (cleaned !== el.value) {
+        el.value = cleaned;
+        showToast('Подозрительная ссылка убрана из поля', null);
+      }
+    }, 0);
+  });
+
+  // При потере фокуса — финальная очистка
+  el.addEventListener('blur', () => {
+    const cleaned = sanitizeUserText(el.value);
+    if (cleaned !== el.value) {
+      el.value = cleaned;
+    }
+  });
+}
+
+// Подключаем санитайзеры при загрузке
+['walkin-name', 'walkin-comment'].forEach(attachInputSanitizer);
+
+function renderWalkinTables() {
+  const wrap = document.getElementById('walkin-tables');
+  if (!wrap) return;
+  const schema = STATE.schemas[STATE.currentRestaurant];
+  if (!schema || !schema.zones) {
+    wrap.innerHTML = '<div style="font-size:13px;color:var(--ink-soft);">Схема не загружена</div>';
+    return;
+  }
+  // Список столов которые сейчас заняты (для подсветки красным)
+  const occupied = new Set();
+  bookingsForCurrentDay().forEach(b => {
+    (b.tables || []).forEach(t => occupied.add(t));
+  });
+
+  let htmlOut = '';
+  schema.zones.forEach(zone => {
+    htmlOut += '<div style="width:100%;font-size:11px;color:var(--ink-soft);font-weight:600;margin-top:6px;text-transform:uppercase;">' + escapeHtml(zone.name) + '</div>';
+    (zone.tables || []).forEach(t => {
+      const isSelected = walkinSelectedTable === t.id;
+      const isOccupied = occupied.has(t.id);
+      let bg = 'white', border = 'var(--line)';
+      if (isSelected) { bg = 'var(--accent)'; border = 'var(--accent)'; }
+      else if (isOccupied) { bg = '#fde68a'; border = '#d4a017'; }
+      htmlOut += '<button data-wt="' + escapeHtml(t.id) + '" style="' +
+        'padding:8px 10px;min-height:44px;min-width:50px;border-radius:6px;' +
+        'background:' + bg + ';border:1px solid ' + border + ';' +
+        'font-size:13px;font-weight:600;' +
+        (isSelected ? 'color:white;' : '') +
+        '">' + escapeHtml(t.id) + '<br><span style="font-size:9px;font-weight:400;opacity:0.7;">' + (t.cap || 0) + ' мест</span></button>';
+    });
+  });
+  wrap.innerHTML = htmlOut;
+
+  // Обработчики выбора стола
+  wrap.querySelectorAll('[data-wt]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      walkinSelectedTable = btn.dataset.wt;
+      renderWalkinTables();
+    });
+  });
+}
+
+// Сохранение walkin
+let walkinSaving = false;  // защита от двойного нажатия
+
+document.getElementById('walkin-save').addEventListener('click', async () => {
+  if (walkinSaving) return;  // уже идёт сохранение
+  if (!canEdit()) {
+    showToast('Нет прав на редактирование', 'error');
+    return;
+  }
+  const name = document.getElementById('walkin-name').value.trim() || 'Гость';
+  const guestsRaw = document.getElementById('walkin-guests').value;
+  const guests = parseInt(guestsRaw) || 0;
+  const time = document.getElementById('walkin-time').value || '';
+  const duration = document.getElementById('walkin-duration').value;
+  const comment = document.getElementById('walkin-comment').value.trim();
+
+  // Валидация
+  if (!walkinSelectedTable) {
+    showToast('Выбери стол', 'error');
+    return;
+  }
+  if (guests < 1 || guests > 50) {
+    showToast('Укажи количество гостей (1–50)', 'error');
+    return;
+  }
+  if (!time || !/^\d{2}:\d{2}$/.test(time)) {
+    showToast('Укажи время посадки в формате ЧЧ:ММ', 'error');
+    return;
+  }
+
+  // Блокируем кнопку
+  walkinSaving = true;
+  const saveBtn = document.getElementById('walkin-save');
+  const originalText = saveBtn.textContent;
+  saveBtn.disabled = true;
+  saveBtn.style.opacity = '0.6';
+  saveBtn.textContent = 'Сохранение...';
+
+  // ЗАЩИТА: не пускаем URL Apps Script и другие подозрительные ссылки в данные
+  const cleanedName = sanitizeUserText(name);
+  const cleanedComment = sanitizeUserText(comment);
+  if (cleanedName !== name || cleanedComment !== comment) {
+    console.warn('Detected URL injection attempt, sanitized');
+  }
+
+  const walkin = {
+    id: uid(),
+    isWalkin: true,
+    restaurant: STATE.currentRestaurant,
+    date: STATE.currentDate,
+    time: time,
+    duration: duration,
+    name: cleanedName || 'Гость',
+    guests: guests,
+    tables: [walkinSelectedTable],
+    comment: cleanedComment,
+    status: 'arrived',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  // Оптимистично добавляем
+  STATE.bookings.push(walkin);
+  closeOverlays();
+  renderAll();
+  showToast('Гость посажен за стол ' + walkinSelectedTable, 'success');
+
+  try {
+    await API.saveWalkin(walkin);
+  } catch (e) {
+    API.addToPendingQueue('saveWalkin', { walkin });
+    showToast('Нет связи — посадка сохранена локально, отправим при восстановлении', null);
+  } finally {
+    // Всегда снимаем блокировку, даже при ошибке
+    walkinSaving = false;
+    saveBtn.disabled = false;
+    saveBtn.style.opacity = '';
+    saveBtn.textContent = originalText;
+  }
+});
+
+document.getElementById('btn-walkin').addEventListener('click', () => openWalkinForm({}));
+
+</script>
+
+</body>
+</html>
