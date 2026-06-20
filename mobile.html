@@ -10,14 +10,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  /* === ТЕСТОВАЯ СРЕДА — визуальный маркер === */
+  /* === ТЕСТОВАЯ СРЕДА === */
   .test-banner-mobile {
     background: #dc2626; color: white;
-    padding: 4px 12px;
-    font-size: 11px; font-weight: 700;
-    text-align: center;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
+    padding: 4px 12px; font-size: 11px; font-weight: 700;
+    text-align: center; letter-spacing: 0.5px; text-transform: uppercase;
   }
   .test-banner-mobile::before { content: '🧪 '; }
   .test-banner-mobile::after { content: ' 🧪'; }
@@ -317,6 +314,84 @@
   }
   .field-row textarea { min-height: 60px; resize: vertical; }
   .field-row .req { color: var(--danger); }
+
+  /* === ДОСТАВКА (mobile) === */
+  .mode-tabs-mobile {
+    display: flex; gap: 4px; padding: 8px 12px;
+    background: var(--bg-alt); border-bottom: 1px solid var(--line);
+    position: sticky; top: 50px; z-index: 39;
+  }
+  .mode-tabs-mobile button {
+    flex: 1; padding: 8px 6px; background: white;
+    border: 1px solid var(--line); border-radius: 999px;
+    font-size: 13px; font-weight: 500; color: var(--ink);
+    display: flex; align-items: center; justify-content: center; gap: 4px;
+  }
+  .mode-tabs-mobile button.active {
+    background: var(--accent); color: white; border-color: var(--accent);
+  }
+  .mode-tabs-mobile .badge-new {
+    background: #dc2626; color: white;
+    padding: 1px 6px; border-radius: 999px;
+    font-size: 10px; font-weight: 700;
+  }
+  .delivery-mobile { display: none; padding: 12px; }
+  .delivery-mobile.active { display: block; }
+  .order-card-m {
+    background: white; border-radius: 10px;
+    padding: 10px 12px; margin-bottom: 8px;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--line);
+    box-shadow: var(--shadow-sm);
+  }
+  .order-card-m.new { border-left-color: #dc2626; }
+  .order-card-m.accepted { border-left-color: #f59e0b; }
+  .order-card-m.delivering { border-left-color: #1e40af; }
+  .order-card-m.delivered, .order-card-m.cancelled { border-left-color: #6b7280; opacity: 0.7; }
+  .ocm-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .ocm-time { font-weight: 700; font-size: 13px; }
+  .ocm-status {
+    font-size: 10px; padding: 2px 8px; border-radius: 999px;
+    font-weight: 700; text-transform: uppercase;
+  }
+  .ocm-status.new { background: #fee2e2; color: #991b1b; }
+  .ocm-status.accepted { background: #fef3c7; color: #92400e; }
+  .ocm-status.delivering { background: #dbeafe; color: #1e3a8a; }
+  .ocm-status.delivered { background: #d1fae5; color: #065f46; }
+  .ocm-status.cancelled { background: #e5e5e5; color: #525252; }
+  .ocm-price { margin-left: auto; font-weight: 600; font-size: 13px; }
+  .ocm-name { font-weight: 600; font-size: 15px; margin: 2px 0; }
+  .ocm-meta { font-size: 12px; color: var(--ink-soft); margin-bottom: 6px; }
+  .ocm-items {
+    background: rgba(184,149,106,0.08); padding: 6px 8px;
+    border-radius: 6px; font-size: 11px; color: var(--ink); line-height: 1.4;
+  }
+  .ocm-actions { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+  .ocm-actions button {
+    flex: 1; padding: 10px 8px; font-size: 12px; font-weight: 600;
+    border-radius: 6px; border: 1px solid var(--line);
+    background: white; color: var(--ink);
+    min-height: 40px;
+  }
+  .ocm-actions button.primary { background: var(--accent); color: white; border-color: var(--accent); }
+  .ocm-actions button.warning { background: #1e40af; color: white; border-color: #1e40af; }
+  .ocm-actions button.success { background: #15803d; color: white; border-color: #15803d; }
+  .ocm-actions button.danger { color: var(--danger); border-color: #fecaca; flex: 0 0 auto; padding: 10px 12px; }
+  .delivery-empty { text-align: center; padding: 40px 16px; color: var(--ink-soft); font-size: 14px; }
+  .delivery-header-m {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 10px; padding: 0 2px;
+  }
+  .delivery-header-m h2 {
+    font-family: 'Fraunces', serif; font-size: 17px; font-weight: 600;
+    margin: 0; color: var(--ink);
+  }
+  .delivery-stats-m { font-size: 11px; color: var(--ink-soft); }
+  .orders-collapsed-m {
+    background: var(--bg-alt); border-radius: 8px;
+    padding: 10px; font-size: 12px; color: var(--ink-soft);
+    text-align: center; cursor: pointer; margin-top: 12px;
+  }
 </style>
 </head>
 <body>
@@ -364,6 +439,21 @@
     <button data-rest="terrasa">Терраса</button>
     <button data-rest="galereya">Галерея</button>
   </div>
+
+  <div class="mode-tabs-mobile" id="mode-tabs-mobile">
+    <button class="active" data-mode="booking">План посадки</button>
+    <button data-mode="delivery">Доставка <span class="badge-new" id="orders-badge-m" style="display:none;">0</span></button>
+  </div>
+
+  <section class="delivery-mobile" id="delivery-section-m">
+    <div class="delivery-header-m">
+      <h2>Заказы</h2>
+      <div class="delivery-stats-m" id="delivery-stats-m">—</div>
+    </div>
+    <div id="orders-list-m"></div>
+    <div class="orders-collapsed-m" id="orders-collapsed-m" style="display:none;">▼ Показать завершённые</div>
+    <div id="orders-archive-m" style="display:none; margin-top: 8px;"></div>
+  </section>
 
   <div class="date-bar">
     <div class="date-display" id="date-display">Сегодня</div>
@@ -523,6 +613,9 @@ const STATE = {
   currentRestaurant: 'dobrograd',
   currentDate: todayISO(),
   bookings: [],
+  orders: [],  // ДОСТАВКА
+  currentMode: 'booking',  // 'booking' | 'delivery'
+  showArchivedOrders: false,
   schemas: {},
   userRestaurant: null,
   isAdmin: false,
@@ -656,7 +749,7 @@ const API = {
         this.password = c.password || '';
         this.enabled = !!c.enabled;
       } else {
-        // ТЕСТОВАЯ СРЕДА: автоподстановка тестовых настроек
+        // ТЕСТОВАЯ СРЕДА
         this.url = 'https://script.google.com/macros/s/AKfycbwG_ofh-JT0SmtQo0TwgzG4Itm9eOonwWEpXakKOgV-EyOOosWUX0e1NwjPH7H6b-PZJA/exec';
         this.password = 'test2026';
         this.enabled = true;
@@ -1020,6 +1113,7 @@ function applyServerData(data) {
     });
   }
   STATE.bookings = all;
+  if (data.orders) STATE.orders = data.orders;
 
   if (data.schemas) {
     STATE.schemas = data.schemas;
@@ -1088,9 +1182,159 @@ if (loadLoginSession()) {
 function renderAll() {
   renderDate();
   renderRestTabs();
-  renderSchema();
-  renderBookingsList();
+  renderModeTabs();
+  if (STATE.currentMode === 'delivery') {
+    renderOrders();
+  } else {
+    renderSchema();
+    renderBookingsList();
+  }
   renderReadonlyBadge();
+}
+
+function renderModeTabs() {
+  document.querySelectorAll('#mode-tabs-mobile button').forEach(b => {
+    b.classList.toggle('active', b.dataset.mode === STATE.currentMode);
+  });
+  // Бейдж — новых заказов в текущем ресторане
+  const newCount = STATE.orders.filter(o =>
+    o.restaurant === STATE.currentRestaurant && o.status === 'new'
+  ).length;
+  const badge = document.getElementById('orders-badge-m');
+  if (badge) {
+    if (newCount > 0) {
+      badge.textContent = newCount;
+      badge.style.display = '';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+  // Скрываем/показываем секции
+  const isDelivery = STATE.currentMode === 'delivery';
+  const deliveryEl = document.getElementById('delivery-section-m');
+  const schemaEl = document.querySelector('.schema-section');
+  const listEl = document.querySelector('.list-section');
+  const dateEl = document.querySelector('.date-bar');
+  const fabEl = document.getElementById('btn-walkin');
+  if (deliveryEl) deliveryEl.classList.toggle('active', isDelivery);
+  // Скрываем элементы режима броней
+  [schemaEl, listEl, dateEl].forEach(el => {
+    if (el) el.style.display = isDelivery ? 'none' : '';
+  });
+  if (fabEl) fabEl.style.display = isDelivery ? 'none' : '';
+}
+
+function renderOrders() {
+  const list = document.getElementById('orders-list-m');
+  const archiveEl = document.getElementById('orders-archive-m');
+  const collapsedEl = document.getElementById('orders-collapsed-m');
+  const statsEl = document.getElementById('delivery-stats-m');
+  if (!list) return;
+
+  const all = STATE.orders.filter(o => o.restaurant === STATE.currentRestaurant);
+  const ACTIVE = ['new', 'accepted', 'delivering'];
+  const active = all.filter(o => ACTIVE.includes(o.status));
+  const archived = all.filter(o => !ACTIVE.includes(o.status));
+
+  const STATUS_ORDER = { new: 0, accepted: 1, delivering: 2, delivered: 3, cancelled: 4 };
+  active.sort((a, b) => {
+    const sd = STATUS_ORDER[a.status] - STATUS_ORDER[b.status];
+    if (sd !== 0) return sd;
+    return (b.receivedAt || '').localeCompare(a.receivedAt || '');
+  });
+  archived.sort((a, b) => (b.receivedAt || '').localeCompare(a.receivedAt || ''));
+
+  const totalSum = all.reduce((s, o) => s + (parseFloat(o.totalPrice) || 0), 0);
+  if (statsEl) {
+    statsEl.textContent = all.length + ' заказ(ов) · ' + Math.round(totalSum).toLocaleString('ru-RU') + ' ₽';
+  }
+
+  if (all.length === 0) {
+    list.innerHTML = '<div class="delivery-empty">Заказов пока нет</div>';
+    if (collapsedEl) collapsedEl.style.display = 'none';
+    if (archiveEl) archiveEl.style.display = 'none';
+    return;
+  }
+
+  list.innerHTML = active.length
+    ? active.map(renderOrderCardM).join('')
+    : '<div class="delivery-empty">Активных заказов нет</div>';
+
+  if (archived.length > 0) {
+    if (collapsedEl) {
+      collapsedEl.style.display = '';
+      collapsedEl.textContent = STATE.showArchivedOrders
+        ? '▲ Скрыть завершённые (' + archived.length + ')'
+        : '▼ Показать завершённые (' + archived.length + ')';
+    }
+    if (archiveEl) {
+      archiveEl.style.display = STATE.showArchivedOrders ? '' : 'none';
+      archiveEl.innerHTML = archived.map(renderOrderCardM).join('');
+    }
+  } else {
+    if (collapsedEl) collapsedEl.style.display = 'none';
+    if (archiveEl) archiveEl.style.display = 'none';
+  }
+}
+
+function renderOrderCardM(o) {
+  const STATUS_LABEL = {
+    new: 'Новый', accepted: 'Принят', delivering: 'В доставке',
+    delivered: 'Доставлен', cancelled: 'Отменён',
+  };
+  const t = o.receivedAt ? new Date(o.receivedAt) : null;
+  const timeStr = t ? String(t.getHours()).padStart(2, '0') + ':' + String(t.getMinutes()).padStart(2, '0') : '—';
+  const items = (o.items || []);
+  const itemsHtml = items.map(it => {
+    const qty = parseInt(it.qty) || 1;
+    const price = parseFloat(it.price) || 0;
+    return '<div>' + escapeHtml(it.name || 'товар') + (it.code ? ' [' + escapeHtml(it.code) + ']' : '') + ' — ' + price.toLocaleString('ru-RU') + ' ₽' + (qty > 1 ? ' × ' + qty : '') + '</div>';
+  }).join('');
+
+  let actions = '';
+  if (o.status === 'new') {
+    actions =
+      '<button class="primary" data-act="accept" data-id="' + escapeHtml(o.id) + '">✓ Принять</button>' +
+      '<button class="danger" data-act="cancel" data-id="' + escapeHtml(o.id) + '">Отмена</button>';
+  } else if (o.status === 'accepted') {
+    actions = '<button class="warning" data-act="delivering" data-id="' + escapeHtml(o.id) + '">🚗 В доставку</button>';
+  } else if (o.status === 'delivering') {
+    actions = '<button class="success" data-act="delivered" data-id="' + escapeHtml(o.id) + '">✅ Доставлен</button>';
+  }
+
+  return '<div class="order-card-m ' + o.status + '" data-id="' + escapeHtml(o.id) + '">' +
+    '<div class="ocm-row">' +
+      '<span class="ocm-time">' + timeStr + '</span>' +
+      '<span class="ocm-status ' + o.status + '">' + (STATUS_LABEL[o.status] || o.status) + '</span>' +
+      '<span class="ocm-price">' + (parseFloat(o.totalPrice) || 0).toLocaleString('ru-RU') + ' ₽</span>' +
+    '</div>' +
+    '<div class="ocm-name">' + escapeHtml(o.customerName || 'без имени') + '</div>' +
+    '<div class="ocm-meta">' + escapeHtml(o.phone || '') + (o.address ? '<br>' + escapeHtml(o.address) : '') + '</div>' +
+    (items.length ? '<div class="ocm-items">' + itemsHtml + '</div>' : '') +
+    (o.comment ? '<div style="font-size:11px;color:var(--ink-soft);margin-top:6px;font-style:italic;">' + escapeHtml(o.comment) + '</div>' : '') +
+    (actions ? '<div class="ocm-actions">' + actions + '</div>' : '') +
+  '</div>';
+}
+
+async function changeOrderStatusM(id, newStatus) {
+  const order = STATE.orders.find(o => o.id === id);
+  if (!order) return;
+  if (newStatus === 'cancelled') {
+    if (!confirm('Отменить заказ для ' + (order.customerName || '?') + '?')) return;
+  }
+  const oldStatus = order.status;
+  order.status = newStatus;
+  order.updatedAt = new Date().toISOString();
+  renderAll();
+  try {
+    const manager = STATE.userRestaurant || (STATE.isAdmin ? 'admin' : '');
+    await API.post('updateOrderStatus', { id, status: newStatus, manager });
+    showToast('Статус: ' + newStatus, 'success');
+  } catch (e) {
+    // При ошибке — в оффлайн-очередь
+    API.addToPendingQueue('updateOrderStatus', { id, status: newStatus, manager: STATE.userRestaurant || '' });
+    showToast('Нет связи — сохранено локально', null);
+  }
 }
 
 function renderDate() {
@@ -1337,6 +1581,36 @@ document.querySelectorAll('#rest-tabs button').forEach(btn => {
   });
 });
 
+// === ДОСТАВКА: обработчики ===
+document.getElementById('mode-tabs-mobile').addEventListener('click', e => {
+  if (e.target.tagName !== 'BUTTON') return;
+  const newMode = e.target.dataset.mode;
+  if (!newMode || newMode === STATE.currentMode) return;
+  STATE.currentMode = newMode;
+  renderAll();
+});
+
+// Кнопки в карточках заказов (делегирование)
+document.addEventListener('click', e => {
+  const btn = e.target.closest('[data-act][data-id]');
+  if (!btn) return;
+  if (!btn.closest('.order-card-m')) return;
+  const id = btn.dataset.id;
+  const act = btn.dataset.act;
+  if (act === 'accept') changeOrderStatusM(id, 'accepted');
+  else if (act === 'delivering') changeOrderStatusM(id, 'delivering');
+  else if (act === 'delivered') changeOrderStatusM(id, 'delivered');
+  else if (act === 'cancel') changeOrderStatusM(id, 'cancelled');
+});
+
+const collapsedBtnM = document.getElementById('orders-collapsed-m');
+if (collapsedBtnM) {
+  collapsedBtnM.addEventListener('click', () => {
+    STATE.showArchivedOrders = !STATE.showArchivedOrders;
+    renderOrders();
+  });
+}
+
 document.getElementById('date-prev').addEventListener('click', () => {
   const d = new Date(STATE.currentDate);
   d.setDate(d.getDate() - 1);
@@ -1376,14 +1650,46 @@ document.getElementById('date-input').addEventListener('change', e => {
 // ============================================================================
 
 // Закрытие модалок
+// Глобальные флаги защиты от двойного нажатия — объявлены вверху чтобы
+// closeOverlays() мог их сбрасывать (защита от "залипания" кнопок)
+let walkinSaving = false;
+let statusChanging = false;
+
 function closeOverlays() {
   document.querySelectorAll('.overlay.active').forEach(o => o.classList.remove('active'));
+  // Сбрасываем застрявшие флаги при закрытии, чтобы кнопки не "залипали"
+  walkinSaving = false;
+  statusChanging = false;
+  // Если кнопка сохранения была отключена — восстанавливаем
+  const saveBtn = document.getElementById('walkin-save');
+  if (saveBtn) {
+    saveBtn.disabled = false;
+    saveBtn.style.opacity = '';
+    if (saveBtn.dataset.origText) {
+      saveBtn.textContent = saveBtn.dataset.origText;
+    } else {
+      saveBtn.textContent = 'Посадить гостя';
+    }
+  }
 }
 document.getElementById('action-close').addEventListener('click', closeOverlays);
 document.getElementById('walkin-close').addEventListener('click', closeOverlays);
 document.querySelectorAll('.overlay').forEach(o => {
   o.addEventListener('click', e => {
-    if (e.target === o) closeOverlays();
+    if (e.target === o) {
+      // Для окна создания свободной посадки — спрашиваем подтверждение,
+      // если есть несохранённые данные. Это защищает хостес от случайного закрытия.
+      if (o.id === 'walkin-overlay') {
+        const nameVal = (document.getElementById('walkin-name').value || '').trim();
+        const guestsVal = document.getElementById('walkin-guests').value;
+        const commentVal = (document.getElementById('walkin-comment').value || '').trim();
+        const hasData = nameVal || (guestsVal && guestsVal !== '2') || commentVal || walkinSelectedTable;
+        if (hasData) {
+          if (!confirm('Закрыть форму без сохранения? Данные будут потеряны.')) return;
+        }
+      }
+      closeOverlays();
+    }
   });
 });
 
@@ -1473,8 +1779,15 @@ function openBookingActions(b) {
 
   // Кнопки смены статуса
   if (isWalkin) {
-    // Walkin — только одна кнопка "Гость ушёл" (если не done)
+    // Walkin — поле редактирования гостей + кнопка завершения
     if (b.status !== 'done') {
+      info += '<div style="font-size:12px;color:var(--ink-soft);margin-bottom:6px;text-transform:uppercase;font-weight:600;">Количество гостей</div>';
+      info += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">';
+      info += '<button id="walkin-edit-minus" style="width:44px;height:44px;border-radius:8px;border:1px solid var(--line);background:white;font-size:20px;font-weight:600;">−</button>';
+      info += '<input type="number" id="walkin-edit-guests" min="1" max="50" value="' + (b.guests || 1) + '" style="flex:1;text-align:center;font-size:18px;font-weight:600;padding:10px;border:1px solid var(--line);border-radius:8px;background:white;" autocomplete="off" name="walkin-edit-guests-field">';
+      info += '<button id="walkin-edit-plus" style="width:44px;height:44px;border-radius:8px;border:1px solid var(--line);background:white;font-size:20px;font-weight:600;">+</button>';
+      info += '</div>';
+      info += '<button id="walkin-save-edit" class="login-btn" style="background:var(--accent);margin-bottom:8px;">Сохранить изменения</button>';
       info += '<button class="login-btn" style="background:#8b5cf6;" id="walkin-done-btn">Гость ушёл (завершить)</button>';
     } else {
       info += '<div style="text-align:center;color:var(--ink-soft);font-size:13px;padding:14px;">Эта посадка уже завершена</div>';
@@ -1510,6 +1823,27 @@ function openBookingActions(b) {
     if (doneBtn) {
       doneBtn.addEventListener('click', () => changeBookingStatus(b, 'done'));
     }
+    // Кнопки +/- для гостей
+    const editInput = document.getElementById('walkin-edit-guests');
+    const minusBtn = document.getElementById('walkin-edit-minus');
+    const plusBtn = document.getElementById('walkin-edit-plus');
+    if (minusBtn && editInput) {
+      minusBtn.addEventListener('click', () => {
+        const v = parseInt(editInput.value) || 1;
+        if (v > 1) editInput.value = v - 1;
+      });
+    }
+    if (plusBtn && editInput) {
+      plusBtn.addEventListener('click', () => {
+        const v = parseInt(editInput.value) || 1;
+        if (v < 50) editInput.value = v + 1;
+      });
+    }
+    // Кнопка "Сохранить изменения"
+    const saveEditBtn = document.getElementById('walkin-save-edit');
+    if (saveEditBtn && editInput) {
+      saveEditBtn.addEventListener('click', () => saveWalkinEdit(b, editInput));
+    }
   } else {
     document.querySelectorAll('[data-status]').forEach(btn => {
       btn.addEventListener('click', () => changeBookingStatus(b, btn.dataset.status));
@@ -1520,8 +1854,6 @@ function openBookingActions(b) {
 }
 
 // Смена статуса — отправка на сервер
-let statusChanging = false;
-
 async function changeBookingStatus(b, newStatus) {
   if (statusChanging) return;
   if (!canEdit()) {
@@ -1560,6 +1892,35 @@ async function changeBookingStatus(b, newStatus) {
     showToast('Нет связи — изменение сохранено локально, отправим при восстановлении', null);
   } finally {
     statusChanging = false;
+  }
+}
+
+// ============================================================================
+// СВОБОДНАЯ ПОСАДКА (walkin) — редактирование существующей
+// ============================================================================
+async function saveWalkinEdit(b, inputEl) {
+  if (!canEdit()) { showToast('В этом ресторане только просмотр', 'error'); return; }
+  const newGuests = parseInt(inputEl.value);
+  if (!newGuests || newGuests < 1 || newGuests > 50) {
+    showToast('Укажи количество гостей (1–50)', 'error');
+    return;
+  }
+  if (newGuests === b.guests) {
+    closeOverlays();
+    return;
+  }
+  b.guests = newGuests;
+  b.updatedAt = new Date().toISOString();
+
+  closeOverlays();
+  renderAll();
+
+  try {
+    await API.saveWalkin(b);
+    showToast('Количество гостей обновлено: ' + newGuests, 'success');
+  } catch (e) {
+    API.addToPendingQueue('saveWalkin', { walkin: b });
+    showToast('Нет связи — изменение сохранено локально', null);
   }
 }
 
@@ -1663,8 +2024,6 @@ function renderWalkinTables() {
 }
 
 // Сохранение walkin
-let walkinSaving = false;  // защита от двойного нажатия
-
 document.getElementById('walkin-save').addEventListener('click', async () => {
   if (walkinSaving) return;  // уже идёт сохранение
   if (!canEdit()) {
